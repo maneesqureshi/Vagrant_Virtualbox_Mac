@@ -1,0 +1,65 @@
+we saw how to use vagrant to spin up virtual development environment using VirtualBox. In this, we’ll learn how to create base box from existing VirtualBox Linux instance(CentOS/Fedora) with Vagrant.
+
+Guest Instance Changes
+
+You’ll need to make the following changes to the existing instance from VirtualBox GUI:
+
+In VirtualBox GUI, right click on your instance & go to settings –> Network
+In Adapter1, check enable & choose attached to: NAT
+click on Advanced, port forwarding –> add & set the following values:
+Name: ssh
+Protocol: TCP
+Host IP: leave it empty
+Host Port: 2222
+Guest IP: leave it empty
+Guest Port: 22
+Click Ok.
+Guest OS Changes
+
+Log on to the instance & you’ll need to make following changes in the Guest OS:
+Add vagrant user; sudo useradd vagrant and set password : vagrant
+As root user, add vagrant to sudoers list & save it
+# visudo
+Defaults:vagrant !requiretty
+Defaults env_keep = “SSH_AUTH_SOCK”
+vagrant ALL=NOPASSWD: ALL
+Update vagrant insecure key: required for login to the box
+$ su – vagrant
+$ mkdir -p ~/.ssh
+$ chmod 0700 ~/.ssh
+$ wget –no-check-certificate https://raw.github.com/mitchellh/vagrant/master/keys/vagrant.pub  -O ~/.ssh/authorized_keys
+$ chmod 0600 ~/.ssh/authorized_keys
+$ chown -R vagrant ~/.ssh
+Install & Configure OpenSSH Server
+$ sudo yum install -y openssh-server
+$ sudo chkconfig sshd on
+$ sudo vi /etc/ssh/sshd_config & update the following & save the file:
+Port 22
+PubKeyAuthentication yes
+AuthorizedKeysFile %h/.ssh/authorized_keys
+PermitEmptyPassword no
+PasswordAuthentication no
+Restart the ssh-service:  $ service sshd restart
+Install VirtualBox GuestAdditions
+$ sudo yum install -y gcc make kernel-devel
+In the VirtualBox GUI, go to Devices > Install Guest Additions… from the menu bar
+cd /media/VBOXADDITIONS_XXXXX
+sudo ./VBoxLinuxAdditions.run
+sudo umount /media/VBOXADDITIONS_XXXXX
+Clean up the box to minimise the size & shutdown the guest OS
+$ sudo yum clean all
+$ Shutdown -h now
+Package Guest Instance
+
+On your host instance create a work folder
+$ mkdir -p ~/workspace/centos64
+$ cd ~/workspace/centos64
+vagrant package –base <Guest Instance Name>. On successful completion, it will create a package.box file in the folder
+Testing
+
+Run the following from the folder, where package.box is stored
+$ vagrant box add <instance_name> ~/package.box
+$ vagrant box init : will initialise the box
+$ vagrant up : will start the instance
+To login to the Guest from host :
+$ vagrant ssh
