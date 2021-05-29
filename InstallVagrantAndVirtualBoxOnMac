@@ -1,10 +1,10 @@
-Vagrant
+# Vagrant
 
 Vagrant is developed by Hashicorp, it is an useful tool for creating virtualised instances using Virtualbox, VMWare, AWS etc. With a simple vagrantfile, you can create uniform virtual development instances & you can also use vagrant instances to test Shell scripts, PowerShell scripts etc.  It is also very useful in testing your Configuration management cookbooks/modules.
 
 For download & more details refer: https://www.vagrantup.com/
 
-VirtualBox
+# VirtualBox
 
 Virtualbox is a free and awesome virtualisation solution by Oracle. You can spin up multiple instance on your Mac using it, it's very useful when you want to spin up different Operating System(OS) instances on your Mac such as Ubuntu/Centos/Windows etc.
 
@@ -12,26 +12,32 @@ All you need is Operating System iso's. Add the iso, set desired configuration a
 
 For download & more details refer: https://www.virtualbox.org
 
-Installation of VirtualBox and Vagrant
 
-Regular Method
+# Installation of VirtualBox and Vagrant
+
+# Regular Method
 
 Download the installer to your Mac using safari browser.
 Double click on the installation package & follow the instructions to install VirtualBox and Vagrant
-Homebrew
 
+# Homebrew
 It's said to be the missing package manager for MacOS, I can't agree more. I found it really useful.
 
-To install homebrew: Paste this command in your terminal/iterm
+# To install homebrew: Paste this command in your terminal/iterm
 /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+
 Add homebrew to your .bashrc/.bash_profile : export $PATH=$PATH:/usr/local/bin
+
 To confirm installation is successful, Open a new terminal and type: brew doctor
+
 Now we'll use home-brew to install VirtualBox & Vagrant.
 
 Go to terminal and type:
 
 brew cask install virtualbox
-brew cask install vagrant
-brew cask install vagrant-manager
-You should be able to see these applications in Launchpad.
 
+brew cask install vagrant
+
+brew cask install vagrant-manager
+
+You should be able to see these applications in Launchpad.
