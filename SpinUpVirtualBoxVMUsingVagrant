@@ -5,7 +5,9 @@ Guest Instance Changes
 You’ll need to make the following changes to the existing instance from VirtualBox GUI:
 
 In VirtualBox GUI, right click on your instance & go to settings –> Network
+
 In Adapter1, check enable & choose attached to: NAT
+
 click on Advanced, port forwarding –> add & set the following values:
 Name: ssh
 Protocol: TCP
@@ -17,35 +19,55 @@ Click Ok.
 Guest OS Changes
 
 Log on to the instance & you’ll need to make following changes in the Guest OS:
+
 Add vagrant user; sudo useradd vagrant and set password : vagrant
+
 As root user, add vagrant to sudoers list & save it
+
 # visudo
 Defaults:vagrant !requiretty
 Defaults env_keep = “SSH_AUTH_SOCK”
 vagrant ALL=NOPASSWD: ALL
 Update vagrant insecure key: required for login to the box
+
 $ su – vagrant
+
 $ mkdir -p ~/.ssh
+
 $ chmod 0700 ~/.ssh
+
 $ wget –no-check-certificate https://raw.github.com/mitchellh/vagrant/master/keys/vagrant.pub  -O ~/.ssh/authorized_keys
+
 $ chmod 0600 ~/.ssh/authorized_keys
+
 $ chown -R vagrant ~/.ssh
+
 Install & Configure OpenSSH Server
+
 $ sudo yum install -y openssh-server
+
 $ sudo chkconfig sshd on
+
 $ sudo vi /etc/ssh/sshd_config & update the following & save the file:
 Port 22
 PubKeyAuthentication yes
 AuthorizedKeysFile %h/.ssh/authorized_keys
 PermitEmptyPassword no
 PasswordAuthentication no
-Restart the ssh-service:  $ service sshd restart
+
+Restart the ssh-service:
+$ service sshd restart
+
 Install VirtualBox GuestAdditions
 $ sudo yum install -y gcc make kernel-devel
+
 In the VirtualBox GUI, go to Devices > Install Guest Additions… from the menu bar
 cd /media/VBOXADDITIONS_XXXXX
+
 sudo ./VBoxLinuxAdditions.run
+
 sudo umount /media/VBOXADDITIONS_XXXXX
+
 Clean up the box to minimise the size & shutdown the guest OS
 $ sudo yum clean all
 $ Shutdown -h now
